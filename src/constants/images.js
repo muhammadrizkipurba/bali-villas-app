@@ -1,3 +1,4 @@
+import DefaultUserImage from "../assets/images/user.png";
 import Portrait1Image from "../assets/images/portrait1.jpeg";
 import Portrait2Image from "../assets/images/portrait2.jpeg";
 import Portrait3Image from "../assets/images/portrait3.jpeg";
@@ -11,6 +12,7 @@ import LoadingGifCircle from "../assets/images/loading-gif-circle.gif";
 import LoadingGifHorizontal from "../assets/images/loading-gif-horizontal.gif";
 
 export {
+    DefaultUserImage,
     Portrait1Image,
     Portrait2Image,
     Portrait3Image,
