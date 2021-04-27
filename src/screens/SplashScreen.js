@@ -7,7 +7,7 @@ const SplashScreen = ({navigation}) => {
   useEffect(() => {
     setTimeout(() => {
       navigation.replace('Home') // redirect to MainApp Display
-    }, 3000);
+    }, 1000);
   }, [navigation]);
 
   return (

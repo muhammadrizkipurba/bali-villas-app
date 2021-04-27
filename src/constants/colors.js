@@ -2,9 +2,10 @@ const Color = {
     white: "#FFFF",
     red: "#D60200",
     black: "#202020",
-    gray: "#d1d1d1",
+    gray: "#D1D1D1",
     grayText: "#9E9E9E",
-    light: "#f6f6f6"
+    light: "#F6F6F6",
+    semiLight: "#EBEBEB"
 };
 
 export { Color };
