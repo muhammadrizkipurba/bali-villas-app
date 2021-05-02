@@ -7,7 +7,6 @@ import {
   StyleSheet,
   SafeAreaView,
   StatusBar,
-  Dimensions,
   TextInput,
   TouchableOpacity,
   FlatList,
@@ -22,7 +21,7 @@ import HomeHeader from '../components/home/Header';
 import IconMaterial from 'react-native-vector-icons/MaterialIcons';
 import VillaCard from '../components/home/VillaCard';
 import CustomModal from '../components/common/CustomModal';
-import GestureRecognizer from 'react-native-swipe-gestures';
+// import GestureRecognizer from 'react-native-swipe-gestures';
 
 const areaOptions = [
   { value: 'Canggu', label: 'Canggu' },
@@ -32,7 +31,8 @@ const areaOptions = [
   { value: 'Ubud', label: 'Ubud' }
 ];
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
+
   const [isLoadingRecommendFavorite, setIsLoadingRecommendFavorite] = useState([]);
   const [isLoadingAreaFavorite, setIsLoadingAreaFavorite] = useState([]);
   const [isOpenAreaModal, setisOpenAreaModal] = useState(false);
@@ -143,6 +143,16 @@ const HomeScreen = () => {
     console.log(`Go to ${screenName} screen`);
   };
 
+  const onShowAllVillas = (section) => {
+    if(section === 'area') {
+      navigation.navigate('SearchResult', { data: villasDataByArea });
+    };
+    if(section === 'recommended') {
+      console.log
+      navigation.navigate('SearchResult', { data: recomendedVillas });
+    };
+  };
+
   const goToVillaDetailScreen = data => {
     console.log(`Go to Villa detail screen with villa _id : ${data._id}`);
   };
@@ -201,7 +211,7 @@ const HomeScreen = () => {
 
   const renderAreaOptions = () => {
     const _View = areaOptions.map((item, idx) => (
-      <TouchableOpacity 
+      <Pressable 
         key={`options-${idx+1}`} 
         style={{
           ...styles.optionsContainer,
@@ -223,7 +233,7 @@ const HomeScreen = () => {
             color: item.value === selectedArea ? Color.white : Color.black
           }}
         >{item.label}</Text>
-      </TouchableOpacity>
+      </Pressable>
     ));
 
     return _View;
@@ -273,7 +283,9 @@ const HomeScreen = () => {
         <View style={styles.sectionWrapper}>
           <View style={styles.sectionTitleWrapper}>
             <Text style={styles.sectionTitle}>Best villas in {selectedArea}</Text>
-            <Text style={styles.seeMoreText}>Show all</Text>
+            <TouchableOpacity onPress={() => onShowAllVillas('area')}>
+              <Text style={styles.seeMoreText}>Show all</Text>
+            </TouchableOpacity>
           </View>
           <FlatList
             style={{paddingVertical: 20, paddingLeft: 1}}
@@ -290,7 +302,9 @@ const HomeScreen = () => {
         <View style={styles.sectionWrapper}>
           <View style={styles.sectionTitleWrapper}>
             <Text style={styles.sectionTitle}>Recommended for you</Text>
-            <Text style={styles.seeMoreText}>Show all</Text>
+            <TouchableOpacity onPress={() => onShowAllVillas('recommended')}>
+              <Text style={styles.seeMoreText}>Show all</Text>
+            </TouchableOpacity>
           </View>
           <FlatList
             style={{paddingVertical: 20, paddingLeft: 1}}
@@ -304,50 +318,58 @@ const HomeScreen = () => {
         {/* RECOMENDED VILLAS */}
 
         {/* SELECT MODAL */}
-        <GestureRecognizer
-          onSwipeDown={closeAreaModalHandler}
+        <CustomModal 
+          modalVisible={isOpenAreaModal}
+          onCloseModal={closeAreaModalHandler}
+          transparentBackground={true}
         >
-          <CustomModal 
-            modalVisible={isOpenAreaModal}
-            onCloseModal={closeAreaModalHandler}
-            transparentBackground={true}
-          >
-            <View style={styles.modalContainer}>
-              <View style={styles.header}>
-                <View style={{width: "100%"}}>
-                  <View style={styles.modalTopBarContainer}>
-                    <View style={styles.modalTopBar}></View>
-                  </View>
-                  <View style={{justifyContent: 'space-between'}}>
-                    <View style={{flexGrow: 2}}>
+          <View style={styles.modalContainer}>
+            <View style={styles.header}>
+              <View style={{width: "100%"}}>
+                <View style={styles.modalTopBarContainer}>
+                  <View style={styles.modalTopBar}></View>
+                </View>
+                <View style={{justifyContent: 'space-between'}}>
+                  <View style={{flexGrow: 2}}>
+                    <View>
                       <Text style={styles.areaText}>Select area</Text>
-                      <ScrollView showsVerticalScrollIndicator={false}>
-                        {renderAreaOptions()}
-                      </ScrollView>
                     </View>
-                    <View style={{flexGrow: 1}}>
-                      <Pressable style={styles.findVillaButton}>
-                        <Text>Find Villas</Text>
-                      </Pressable>
-                    </View>
+                    <ScrollView 
+                      style={{height: '90%'}} 
+                      showsVerticalScrollIndicator={false}
+                    >
+                      {renderAreaOptions()}
+                    </ScrollView>
                   </View>
                 </View>
               </View>
             </View>
-          </CustomModal>
-        </GestureRecognizer>
+            <View>
+              <TouchableOpacity onPress={closeAreaModalHandler} style={styles.findVillaButtonWrapper}>
+                <Text style={styles.findVillaButton}>Find Villas</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </CustomModal>
         {/* SELECT MODAL */}
       </ScrollView>
     </SafeAreaView>
   );
 };
 
-const windowWidth = Dimensions.get('window').width;
+// const windowHeight = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Color.white,
+  },
+  flexRow: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  justifyContentBetween: {
+    justifyContent: 'space-between'
   },
   sectionWrapper: {
     marginTop: 20,
@@ -396,9 +418,9 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     marginTop: 10,
     shadowColor: Color.gray,
-    shadowOffset: {width: 0, height: -1},
-    shadowOpacity: 1,
-    shadowRadius: 5,
+    shadowOffset: {width: 0, height: -10},
+    shadowOpacity: .3,
+    shadowRadius: 10,
     elevation: 1,
   },
   modalTopBarContainer: {
@@ -418,6 +440,7 @@ const styles = StyleSheet.create({
   },
   header: {
     padding: 20,
+    flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
@@ -443,6 +466,20 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     marginLeft: 10
+  },
+  findVillaButtonWrapper: {
+    padding: 20,
+    marginBottom: 20,
+    marginHorizontal: 20,
+    borderRadius: 14,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: Color.black,
+  },
+  findVillaButton: {
+    fontSize: 20,
+    color: "#ffff",
+    fontWeight: "600"
   }
 });
 

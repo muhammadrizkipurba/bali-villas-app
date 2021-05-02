@@ -12,6 +12,8 @@ const VillaCard = ({
   isFavorited,
   isLoadingFavorite,
   favoriteVillaHandler,
+  customCardStyle,
+  customBannerImgStyle
 }) => {
   let roomInfoSection = null;
 
@@ -84,8 +86,8 @@ const VillaCard = ({
   return (
     <TouchableOpacity
       onPress={onPress}
-      style={styles.card}>
-      <Image source={{uri: imageURL}} style={styles.villaBannerImage} />
+      style={customCardStyle ? customCardStyle : styles.card}>
+      <Image source={{uri: imageURL}} style={customBannerImgStyle ? customBannerImgStyle : styles.villaBannerImage} />
       <View style={styles.cardBody}>
         <View style={styles.flexRowBetween}>
           <Text style={{fontSize: 18, fontWeight: '600'}}>{item.name}</Text>

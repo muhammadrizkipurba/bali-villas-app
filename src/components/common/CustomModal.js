@@ -15,7 +15,7 @@ const CustomModal = ({ modalVisible, transparentBackground, onCloseModal, childr
         }}
       >
         <SafeAreaView style={{ flex: 0, backgroundColor: Color.white }} />
-        <SafeAreaView>
+        <SafeAreaView style={{ flex: 1, backgroundColor: Color.white }}>
           { children }
         </SafeAreaView>
       </Modal>
